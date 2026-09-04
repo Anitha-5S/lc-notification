@@ -1,0 +1,58 @@
+plugins {
+    id 'org.springframework.boot' version '2.6.1'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+}
+
+group 'com.c2.lc.ms'
+version '2.0.0'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
+
+    implementation 'com.google.code.gson:gson:2.8.9'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.6.3'
+    implementation 'org.springframework.boot:spring-boot-starter-web:2.6.3'
+    implementation 'org.springframework.boot:spring-boot-starter-validation:2.6.3'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux:2.6.3'
+    implementation 'org.springframework.kafka:spring-kafka:2.8.2'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+    implementation group: 'p6spy', name: 'p6spy', version: '3.9.1'
+    runtimeOnly 'org.postgresql:postgresql:42.3.1'
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb:2.6.3'
+
+    implementation group: 'com.google.zxing', name: 'core', version: '3.4.0'
+    implementation group: 'com.google.zxing', name: 'javase', version: '3.4.0'
+
+    implementation 'com.azure:azure-messaging-eventhubs:5.10.4'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+    implementation group: 'com.microsoft.azure', name: 'azure-storage', version: '8.6.6'
+    implementation 'com.google.firebase:firebase-admin:8.1.0'
+
+}
+
+// ms-lib dependencies
+dependencies {
+    implementation files('../../../ms-lib/build/libs/ms-lib-2.0.0.jar')
+}
+
+// ms-notification-lib dependencies
+dependencies {
+    implementation files('../ms-notification-lib/build/libs/ms-notification-lib-2.0.0.jar')
+}
+
+test {
+    useJUnitPlatform()
+}

@@ -1,0 +1,38 @@
+/ms-notification-c-push/.gradle/
+/ms-notification-c-push/build/
+/ms-notification-p/.gradle/
+/ms-notification-p/build/
+/ms-notification-lib/.gradle/
+/ms-notification-lib/build/
+/.jpb
+/.idea/sonarlint
+/.idea/jpa*.*
+
+# Gradle
+.gradle/
+build/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# VS Code
+.vscode/
+
+# Java
+*.class
+
+# Logs
+*.log
+
+# Environment files
+.env
+*.env
+
+# Local configuration
+application-local.properties
+application-local.yml
+
+# Credentials
+**/*credentials*
+**/*secret*

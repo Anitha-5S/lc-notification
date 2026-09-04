@@ -1,0 +1,6 @@
+rootProject.name = 'ms-notification'
+include 'ms-notification-c-push'
+include 'ms-notification-lib'
+include 'ms-notification-p'
+include 'ms-notification-admin'
+

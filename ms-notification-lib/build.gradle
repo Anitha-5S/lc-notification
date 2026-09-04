@@ -1,0 +1,99 @@
+plugins {
+    id 'org.springframework.boot' version '2.6.1'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+    id 'maven-publish'
+}
+
+group 'com.c2.lc.ms'
+version '2.0.0'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+  mavenCentral()
+  maven {
+    url 'https://pkgs.dev.azure.com/lc-ms-org/ms-lib/_packaging/dev-ms-lib-2.0/maven/v1'
+    name 'dev-ms-lib-2.0'
+    credentials {
+      username 'lc-ms-org'
+      password '#{token}#'
+    }
+  }
+}
+
+
+repositories {
+	mavenCentral()
+    maven {
+        url 'https://pkgs.dev.azure.com/lc-ms-org/_packaging/ms-notification-lib/maven/v1'
+        name 'ms-notification-lib'
+        credentials {
+            username 'lc-ms-org'
+            password '#{token}#'
+        }
+    }
+}
+
+
+publishing { 
+    publications { 
+        myPublication(MavenPublication) { 
+            groupId 'ms-notification-lib' 
+            artifactId 'ms-notification-lib' 
+            version '#{BuildId}#' 
+           //artifact version publishing to the azure artifacts
+            artifact './build/libs/ms-notification-lib-2.0.0.jar' 
+        } 
+    } 
+    // Repositories *to* which Gradle can publish artifacts 
+    repositories { 
+        maven { 
+            url 'https://pkgs.dev.azure.com/lc-ms-org/_packaging/ms-notification-lib/maven/v1'
+            name 'ms-notification-lib'
+            credentials {
+                username 'lc-ms-org'
+                password '#{token}#'
+            } 
+        } 
+    } 
+}
+
+
+dependencies {
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
+
+    implementation 'com.google.code.gson:gson:2.8.9'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.6.3'
+    implementation 'org.springframework.boot:spring-boot-starter-web:2.6.3'
+    implementation 'org.springframework.boot:spring-boot-starter-validation:2.6.3'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux:2.6.3'
+    implementation 'org.springframework.kafka:spring-kafka:2.8.2'
+    implementation group: 'p6spy', name: 'p6spy', version: '3.9.1'
+    runtimeOnly 'org.postgresql:postgresql:42.3.1'
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb:2.6.3'
+
+    implementation 'com.azure:azure-messaging-eventhubs:5.10.4'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+	implementation group: 'dev-ms-lib-2.0', name: 'dev-ms-lib-2.0', version: '1.0.27'
+}
+
+// ms-lib dependencies
+// dependencies {
+//    implementation files('../../../ms-lib/build/libs/ms-lib-2.0.0.jar')
+// }
+
+test {
+    useJUnitPlatform()
+}
+
+jar {
+    enabled = true
+    archiveClassifier.set("")
+}

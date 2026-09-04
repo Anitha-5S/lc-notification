@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: #{NAMESPACE}#
+  name: #{APP_NAME}#-deployment
+spec:
+  selector:
+    matchLabels:
+      app: #{APP_NAME}#
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25% 
+  template:
+    metadata:
+      labels:
+        app: #{APP_NAME}#
+    spec:
+      containers:
+      - name: #{APP_NAME}#
+        image: #{REGISTRY_NAME}#/#{IMAGE_NAME}#:#{Build.BuildId}#
+        ports:
+        - containerPort: #{PORT}#
+        resources:
+          limits:
+            cpu: 0.5
+#        env:
+#          - name: POSTGRES_DB_URL
+#            value: #{POSTGRES_DB_URL}#
+#          - name: POSTGRES_DB_USER
+#            value: #{POSTGRES_DB_USER}#
+#          - name: POSTGRES_DB_PASS
+#            value: #{POSTGRES_DB_PASS}#
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: #{APP_NAME}#
+  namespace: #{NAMESPACE}#
+  name: #{APP_NAME}#-service
+  annotations: 
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+spec:
+  type: LoadBalancer
+  ports:
+  - port: #{PORT}#
+    targetPort: #{PORT}#
+  selector:
+    app: #{APP_NAME}#
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: #{APP_NAME}#-hpa
+  namespace: #{NAMESPACE}#
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: #{APP_NAME}#-deployment
+  minReplicas: 1
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 60
